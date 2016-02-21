@@ -64,7 +64,6 @@ def get_atoms_in_rigids(rigidFilename):
 
 rawAtomsInRigids = get_atoms_in_rigids(rigidFilename)
 
-
 # Our next step is to remove from that big list of all atom numbers in the the rigid structures any atom
 # that is not an alpha carbon. This should hopefully speed up our final evaluation, but honestly, I don't
 # know if it really matters. This is worth checking in with Filip from a Big O standpoint.

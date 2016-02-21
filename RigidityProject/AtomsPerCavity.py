@@ -34,7 +34,7 @@ for line in proteinDB:
             residueCounter += 1
             atomCounter = 1
     else:
-        if not firstOrLastResidue and len(atomsPerResidue ) >= 1:
+        if not firstOrLastResidue and len(atomsPerResidue) >= 1:
             atomsPerResidue.append(atomCounter)
             firstOrLastResidue = True
 
