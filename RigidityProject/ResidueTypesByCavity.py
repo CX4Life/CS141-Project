@@ -69,3 +69,26 @@ for cavity in ResidueTypeByCavity:
 print(ResidueTypeByCavity)
 
 ### CAV number - size (angstroms) residue count, residue TYPES, # of rigid clusters, total size of rigid clusters
+
+def get_all_aminos(listByType):
+    aminos = []
+    while len(aminos) != 20:
+        for list in listByType:
+            for elem in list:
+                if elem not in aminos:
+                    aminos.append(elem)
+    aminos.sort()
+    return aminos
+
+Aminos = (get_all_aminos(ResidueTypeByCavity))
+
+HolyCrapThisMightBeRad = []
+for cavity in ResidueTypeByCavity:
+    aminoCounter = {x: cavity.count(x) for x in Aminos}
+    HolyCrapThisMightBeRad.append(aminoCounter)
+
+for cavity in ResidueTypeByCavity:
+    cavityNumber = ResidueTypeByCavity.index(cavity)+1
+    print('Cavity #', cavityNumber ,'contains',HolyCrapThisMightBeRad[cavityNumber-1]['LYS'], 'lysine')
+
+
