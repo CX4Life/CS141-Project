@@ -62,3 +62,11 @@ def get_residues_by_cavity(filename):
         duesByCavity.append(listResidues)
     cavityInfo.close()
     return duesByCavity
+
+def get_all_aminos(listByType):
+    aminos = []
+    for list in listByType:
+        for elem in list:
+            if elem not in aminos:
+                aminos.append(elem)
+    return aminos
