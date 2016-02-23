@@ -2,6 +2,7 @@
 # These functions are used with the "*.pdb.text" file.
 # --------------------------------------------------------------
 
+
 def is_atom(line):
     if line[0] == 'A' and line[1] == 'T' and line[2] == 'O':
         return True
@@ -14,6 +15,7 @@ def is_alpha_carbon(line):
         return True
     else:
         return False
+
 
 def get_atom_number(line):
     atom_number = ''
@@ -32,7 +34,8 @@ def get_atom_number(line):
 # This simply parses a "SurfReport" file and returns the size of each cavity.
 # Output is a list whose index is cavity identity and value is cavity size.
 
-def getCavitySize(filename):
+
+def get_cavity_size(filename):
     assert type(filename) is str
     openFile = open(filename, 'r')
     resultCavitySize = []
@@ -48,7 +51,8 @@ def getCavitySize(filename):
 # when calling list[i[n]], "i" represents the Cavity number, and "n" represents a residue number
 # in cavity "i"
 
-def getResiduesByCavity(filename):
+
+def get_residues_by_cavity(filename):
     assert type(filename) is str
     cavityInfo = open(filename, 'r')
     duesByCavity = []

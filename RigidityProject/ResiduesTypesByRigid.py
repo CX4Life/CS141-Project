@@ -105,17 +105,39 @@ rawAtomsInRigids = get_atoms_in_rigids(rigidFilename)
 
 # A nice thing would be a list of residues in each rigid BY residue number. Let's make that happen...
 
-residuesInRigids = []
 
-for individualRigid in rawAtomsInRigids:
-    residuesInThisRigid = []
-    for residue in atomsByResidue:
-        for atomNumber in individualRigid:
-            if atomNumber in residue and atomsByResidue.index(residue) not in residuesInThisRigid:
-                residuesInThisRigid.append(atomsByResidue.index(residue))
-    atomsByResidue.append(atomsInThisResidue)
+def get_residues_in_rigids(rawAtomsInRigids, atomsByResidue):
 
-print(atomsByResidue)
+    residuesInRigids = []
+    for individualRigid in rawAtomsInRigids:
+        residuesInThisRigid = []
+        for residue in atomsByResidue:
+            for atomNumber in individualRigid:
+                if atomNumber > residue[-1]:
+                    break
+                if atomNumber in residue and (atomsByResidue.index(residue) not in residuesInThisRigid):
+                    residuesInThisRigid.append(atomsByResidue.index(residue))
+        residuesInRigids.append(residuesInThisRigid)
+    return residuesInRigids
 
+# Cool. Now just changing those integer values to residue types should be simple.
 
+numericalResiduesInRigids = get_residues_in_rigids(rawAtomsInRigids, atomsByResidue)
+
+bugCheck1 = len(numericalResiduesInRigids)
+
+residueTypesByRigid = []
+
+for rigid in numericalResiduesInRigids:
+    residueTypesThisRigid = []
+    for residue in rigid:
+        residueTypesThisRigid.append(ResidueTypes[residue])
+    residueTypesByRigid.append(residueTypesThisRigid)
+
+bugCheck2 = len(residueTypesByRigid)
+
+assert bugCheck1 == bugCheck2
+assert len(rawAtomsInRigids) == len(residueTypesByRigid)
+
+print(residueTypesByRigid)
 
