@@ -1,3 +1,5 @@
+from tabulate import tabulate
+
 # --------------------------------------------------------------
 # These functions are used with the "*.pdb.text" file.
 # --------------------------------------------------------------
@@ -45,6 +47,16 @@ def get_residue_type(line):
     for i in range(17,20):
         residue_type += line[i]
     return residue_type
+
+
+def return_each_residue_type(filename):
+    residueTypes = []
+    proteinDB = open(filename, 'r')
+    for line in proteinDB:
+        if is_atom(line) and is_alpha_carbon(line):
+            residueTypes.append(get_residue_type(line))
+    proteinDB.close()
+    return residueTypes
 
 # --------------------------------------------------------------
 # The next two functions are used with the "*.SurfReport" file.
@@ -96,7 +108,6 @@ def get_atoms_in_rigids(rigidFilename):
     rigidData = ElementTree.parse(rigidFilename)
     root = rigidData.getroot()
     atomsInRigids = []
-    i = 0
     for child in root[0]:
         for pointSet in child:
             # print('This is a new rigid structure')
@@ -125,7 +136,6 @@ def get_all_aminos(listByType):
     return aminos
 
 
-
 proteinName = input('What is the alphanumeric designation of this protein? ')
 
 pdbFile = proteinName + '.pdb.txt'
@@ -136,12 +146,21 @@ xmlFile = str.lower(proteinName) + '_Processed_postPG_BBH.xml'
 alphaNums = get_alpha_carbon_atom_numbers(pdbFile)
 duesByCavity = get_residues_by_cavity(surfFile)
 AtomsInRigids = get_atoms_in_rigids(xmlFile)
+
+rigidSize = []
+for rigid in AtomsInRigids:
+    rigidSize.append(len(rigid))
+
 rawAtomsInRigids = get_alpha_carbons_in_rigids(AtomsInRigids, alphaNums)
 alphaCarbonAtomNumbers = get_alpha_carbon_atom_numbers(pdbFile)
 cavSize = get_cavity_size(surfFile)
+ResidueTypes = return_each_residue_type(pdbFile)
 
 rigidsByCavity = []
+ResidueTypeByCavity = []
+ResiduesPerCavity = []
 inCavity = False
+
 
 for cavity in duesByCavity:
     rigidsThisCavity = 0
@@ -156,15 +175,33 @@ for cavity in duesByCavity:
                     break
                 residueCounter += 1
         inCavity = False
+    residuesThisCavity = []
+    for residue in cavity:
+        residuesThisCavity.append(ResidueTypes[residue-1])
+    ResidueTypeByCavity.append(residuesThisCavity)
+    ResiduesPerCavity.append(len(residuesThisCavity))
     rigidsByCavity.append(rigidsThisCavity)
 
 outputFile = proteinName + "Output.txt"
-
 outputFile = open(outputFile, 'w')
 
 cavNums = []
 for i in range(0, len(cavSize)):
     cavNums.append(i)
 
-table = {'#': cavNums, 'Size': cavSize, 'Rigids Contained': rigidsByCavity}
+# --------------------------------------------------------------
+# For the sake of not printing a table with a ton of columns,
+# I completely arbitrarily chose to count the number
+# of Alanines, Glycines and Valines in each cavity. However, the
+# 'ResidueTypesByCavity' object contains counts for every
+# residue type, so the code could very easily be modified to
+# include print every residue type for every cavity.
+# --------------------------------------------------------------
+
+table = [['Cav #', 'Cav Size', '# Residues', "ALA's", "GLY's", "VAL's", '# Rigids', 'Total Size of Rigids']]
+for i in range(0, len(cavSize)):
+    table.append([cavNums[i], cavSize[i], ResiduesPerCavity[i], ResidueTypeByCavity[i].count('ALA'), ResidueTypeByCavity[i].count('GLY'), ResidueTypeByCavity[i].count('VAL'), rigidsByCavity[i], rigidSize[i]])
+
+outputFile.write(tabulate(table))
+outputFile.close()
 
