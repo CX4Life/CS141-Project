@@ -159,17 +159,19 @@ ResidueTypes = return_each_residue_type(pdbFile)
 rigidsByCavity = []
 ResidueTypeByCavity = []
 ResiduesPerCavity = []
+rigidSizeByCavity = []
 inCavity = False
-
 
 for cavity in duesByCavity:
     rigidsThisCavity = 0
+    rigidSizeThisCavity = 0
     for individualRigid in rawAtomsInRigids:
         stopLoop = int(len(cavity))
         residueCounter = 0
         while not inCavity and residueCounter != stopLoop:
             for residueNumber in cavity:
                 if alphaCarbonAtomNumbers[residueNumber] in individualRigid:
+                    rigidSizeThisCavity += rigidSize[rawAtomsInRigids.index(individualRigid)]
                     inCavity = True
                     rigidsThisCavity += 1
                     break
@@ -181,6 +183,7 @@ for cavity in duesByCavity:
     ResidueTypeByCavity.append(residuesThisCavity)
     ResiduesPerCavity.append(len(residuesThisCavity))
     rigidsByCavity.append(rigidsThisCavity)
+    rigidSizeByCavity.append(rigidSizeThisCavity)
 
 outputFile = proteinName + "Output.txt"
 outputFile = open(outputFile, 'w')
@@ -200,8 +203,7 @@ for i in range(0, len(cavSize)):
 
 table = [['Cav #', 'Cav Size', '# Residues', "ALA's", "GLY's", "VAL's", '# Rigids', 'Total Size of Rigids']]
 for i in range(0, len(cavSize)):
-    table.append([cavNums[i], cavSize[i], ResiduesPerCavity[i], ResidueTypeByCavity[i].count('ALA'), ResidueTypeByCavity[i].count('GLY'), ResidueTypeByCavity[i].count('VAL'), rigidsByCavity[i], rigidSize[i]])
+    table.append([cavNums[i], cavSize[i], ResiduesPerCavity[i], ResidueTypeByCavity[i].count('ALA'), ResidueTypeByCavity[i].count('GLY'), ResidueTypeByCavity[i].count('VAL'), rigidsByCavity[i], rigidSizeByCavity[i]])
 
 outputFile.write(tabulate(table))
 outputFile.close()
-
