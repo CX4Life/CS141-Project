@@ -1,4 +1,4 @@
-from tabulate import tabulate
+#from tabulate import tabulate
 import sys
 
 # --------------------------------------------------------------
@@ -227,6 +227,10 @@ for i in range(0, len(cavSize)):
 table = [['Cav #', 'Cav Size', '# Residues', '# Rigids', 'Total Size of Rigids']]
 for i in range(0, len(cavSize)):
     table.append([cavNums[i], cavSize[i], ResiduesPerCavity[i], rigidsByCavity[i], rigidSizeByCavity[i]])
-
-outputFile.write(tabulate(table))
+    for line in table:
+        outString = ""
+        for elem in line:
+            outString += str(elem) + "\t"
+        outputFile.write(outString + "\n")
+#outputFile.write(tabulate(table))
 outputFile.close()
