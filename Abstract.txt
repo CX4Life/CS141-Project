@@ -1,0 +1,3 @@
+Improving our understanding of the physical proporties of proteins has far-reaching implications for fields of study ranging from organic chemistry to genomics.
+In our research, we attempt to combine information from previous work concerning protein rigidity and surface topologoy on a group of roughly 200,000 proteins in
+order to evaluate any coorelation between these physical properties of proteins. 
