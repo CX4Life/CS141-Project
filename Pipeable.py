@@ -211,10 +211,6 @@ for cavity in duesByCavity:
 outputFile = proteinName + "Output.txt"
 outputFile = open(outputFile, 'w')
 
-cavNums = []
-for i in range(0, len(cavSize)):
-    cavNums.append(i)
-
 # --------------------------------------------------------------
 # For the sake of not printing a table with a ton of columns,
 # I completely arbitrarily chose to count the number
@@ -224,13 +220,19 @@ for i in range(0, len(cavSize)):
 # include print every residue type for every cavity.
 # --------------------------------------------------------------
 
-table = [['Cav #', 'Cav Size', '# Residues', '# Rigids', 'Total Size of Rigids']]
+table = []
+outputFile.write("Output is as such:\nC# : Cavity Number\n")
+outputFile.write("CS : Cavity Size\nRsC : Residues in this cavity\n")
+outputFile.write("RgC : Rigid clusters containing >= 1 residue in this cavity\n")
+outputFile.write("SumRgSiz : Total atoms in all Rigid clusters interacting with this cavity\n\n")
+
+outputFile.write("C#      CS      RsC     RgC     SumRgSiz\n")
 for i in range(0, len(cavSize)):
-    table.append([cavNums[i], cavSize[i], ResiduesPerCavity[i], rigidsByCavity[i], rigidSizeByCavity[i]])
-    for line in table:
-        outString = ""
-        for elem in line:
-            outString += str(elem) + "\t"
-        outputFile.write(outString + "\n")
+    table.append([i, cavSize[i], ResiduesPerCavity[i], rigidsByCavity[i], rigidSizeByCavity[i]])
+for line in table:
+    outString = ""
+    for elem in line:
+        outString += str(elem) + "\t"
+    outputFile.write(outString + "\n")
 #outputFile.write(tabulate(table))
 outputFile.close()

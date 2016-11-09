@@ -6,7 +6,7 @@ cd input/
 allPDBs=`ls *.pdb.txt`
 allSurfs=`ls *.Surf*`
 allXMLs=`ls *.xml`
-
+echo {$pwd}
 arrPDB=($allPDBs)
 arrSurf=($allSurfs)
 arrXML=($allXMLs)
@@ -28,7 +28,7 @@ for file in `seq 0 $stopLoop`; do
 		cd tmp
 		for dir in `ls`; do
 			cd $dir
-			mv * ~/Rigidity/output/
+			mv * ../../output/
 			cd ..
 			rm -r $dir
 		done
@@ -42,7 +42,7 @@ for file in `seq 0 $stopLoop`; do
 	fi
 	let "batch++"
 done
-rm -r WT* final*
+rm -r WT* #final*
 
 # echo "Sending 1HE4 to pipeable"
 # echo ${proteinName}
@@ -50,4 +50,3 @@ rm -r WT* final*
 # echo "Those are the two ways..."
 # echo ${proteinName} | python3 Pipeable.py
 echo "Done!"
-
